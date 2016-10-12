@@ -1,0 +1,168 @@
+<!-- Bootstrap v3.0.3 -->
+<link href="https://s3.amazonaws.com/mturk-public/bs30/css/bootstrap.min.css" rel="stylesheet" />
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+ <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+  
+  <script type="text/javascript">
+  window.onload = function() {
+    // Get the Assignment ID, which will be added to your URL by Mechanical Turk.
+    var assignment_id = location.search.match(/assignmentId=(\w+)/)[1];
+    document.getElementById("assignment_id").value = assignment_id;
+
+    // Assignment ID "ASSIGNMENT_ID_NOT_AVAILABLE" of indicates preview mode.  Warn worker.
+    if( assignment_id == "ASSIGNMENT_ID_NOT_AVAILABLE" ) {
+      document.getElementById("submit_button").disabled = true;
+
+      
+    }
+    // Get the Submit URL, which will be added to your URL by Mechanical Turk. */
+  }
+  
+$(document).ready(function(){
+     
+      $("#div1").toggleClass('hidden');
+      $("#p1").prop("disabled",true);
+      
+      {% for field in form %}
+      {% with forloop.counter|cut:" " as index1 %}
+      $("#submit_button{{index1}}").prop("disabled",{{submit_state}});
+      $("#b{{index1}}").click(function(){
+          $("#div{{index1}}").toggleClass('hidden');
+          $("#div{{index1}}").next().toggleClass('hidden');
+      });
+      $("#p{{index1}}").click(function(){
+          $("#div{{index1}}").toggleClass('hidden');
+          $("#div{{index1}}").prev().toggleClass('hidden');
+      });
+
+      {% endwith %}
+      {% endfor %}
+      $("#b{{num_video_pair}}").prop("disabled",true);
+
+    });
+
+</script>
+
+<section class="container" id="Other" style="margin-bottom:15px; padding: 10px 10px; font-family: Verdana, Geneva, sans-serif; color:#333333; font-size:0.9em;">
+  <!-- Content Body -->
+
+<ul class="nav nav-tabs">
+  <li class="active"><a data-toggle="tab" href="#home">PreTest</a></li>
+  <li> <a data-toggle="tab" href="#menu1">Test</a></li>
+</ul>
+
+<div class="tab-content">
+  <div id="home" class="tab-pane fade in active">
+    <h3>Compare the semantic similarity between two videos</h3>
+    <div class="row col-xs-12 col-md-12"><!-- Instructions -->
+    <div class="panel panel-primary">
+      <div class="panel-heading"><strong>Instructions</strong></div>
+
+      <div class="panel-body">
+      <p>In a HIT, you will watch a pair of video clips played simultaneously each time. The videos are 10-seconds long on average and will be played in a loop. You can watch them until you feel you can make a decision on their similarity, then choose your opinion from one of the options below: “Yes (similar)”, “No (not similar)”, “Not Sure”, and click the “Next” button to move to the next video pair. Each HIT contains 30 video-pair comparisons. Once you finish all the video pairs in the HIT, press the “Submit” button to submit your results. {{links}}</p>
+
+      <ul>
+        <li>To make you clear about what semantic similarity is, at the beginning of each HIT, you will see three pairs of videos for training.  </li>
+        <li>Note that there no individual qualification test session, they are embedded in the test session.{{lol}}  </li>
+        <li>Take your time to do the task. However, a one-minute break after you finish 15 video pairs is recommended. {{lol}} </li>
+
+        </ul>
+      </div>
+    </div>
+<!-- End Instructions -->
+  </div>
+  </div>
+  <div id="menu1" class="tab-pane fade ">
+    
+    <section>
+     <form action="/" method="post">
+	    {% csrf_token %}
+	    {% for field in form %}
+	    {% with forloop.counter|cut:" " as index %}
+  			
+		
+
+	    <div id = "div{{index}}" class = "hidden" >
+      <div class="progress" id = "prog{{index}}">
+  <div class="progress-bar progress-bar-warning progress-bar-striped" role="progressbar" id = "probar{{index}}" 
+  aria-valuenow="{{index}}" aria-valuemin="0" aria-valuemax="{{num_video_pair}}" style="width: {% widthratio index num_video_pair 100 %}%">
+   {% widthratio index num_video_pair 100 %}%
+  </div>
+</div>
+      {{index}}/{{num_video_pair}}
+      <div class="row">
+	<div class="col-sm-6">
+
+	  <!--<embed src="{{ link1|slice:index|last }}" width="560" height="315" scale="aspect" controller="true" autoplay="false">-->
+
+    	  
+	  <video width="560" height="315" controls muted  loop preload="none">
+      <source src={{ link1|slice:index|last }} type='video/mp4' />
+  <!--<source src='mymovie.ogv' type='video/ogg; codecs="theora, vorbis"' />-->
+
+        <object id="flowplayer" data="flowplayer-3.2.2.swf" type="application/x-shockwave-flash" width="560" height="315" >
+          <param name="movie" value="flowplayer-3.2.2.swf">
+          <param name="allowfullscreen" value="false">
+          <param name="flashvars" value="config={'clip':{'url':{{ link1|slice:index|last }},'autoPlay':true}}">
+        </object>
+
+    </video>
+	</div>
+	
+	<div class="col-sm-6">
+	  <!--<embed src="{{ link2|slice:index|last }}" width="560" height="315" scale="aspect" controller="true" autoplay="false">-->
+    <video width="560" height="315" controls muted loop preload="none">
+      <source src={{ link2|slice:index|last }} type='video/mp4' />
+  <!--<source src='mymovie.ogv' type='video/ogg; codecs="theora, vorbis"' />-->
+
+        <object id="flowplayer" data="flowplayer-3.2.2.swf" type="application/x-shockwave-flash" width="560" height="315" >
+          <param name="movie" value="flowplayer-3.2.2.swf">
+          <param name="allowfullscreen" value="false">
+          <param name="flashvars" value="config={'clip':{'url':{{ link2|slice:index|last }},'autoPlay':true}}">
+        </object> 
+
+    </video>
+	</div>
+	</div>
+
+	<fieldset><label>Are the two videos similar?</label>
+	 <!--{% with forloop.counter|stringformat:"s" as id %}
+    		{% with "pair"|add:id as radio_id %} -->
+    			{{field}}
+    <!--		{% endwith %}
+		{% endwith %}-->
+    </fieldset>
+    <center>
+    <button type = "button" id = "p{{index}}">Previous</button>
+    <button type="submit" value="Submit" id = "submit_button{{index}}">Submit</buttton>
+    <button type = "button" id = "b{{index}}">Next</button>
+    </center>
+    
+	    <!--<div class="radio"><label><input name="Answer" type="radio" value="1" />Yes</label></div>
+	    <div class="radio"><label><input name="Answer" type="radio" value="0" />No</label></div>-->
+      </div>
+	    {% endwith %}
+	  	{% endfor %}
+	  </form>
+
+
+  
+	
+    </section>
+    </div>
+</div>
+
+
+
+
+<!-- End Content Body --></div>
+</section>
+<!-- close container -->
+<style type="text/css">fieldset {
+  padding: 10px;
+  background:#fbfbfb;
+  border-radius:5px;
+  margin-bottom:5px;
+}
+</style>

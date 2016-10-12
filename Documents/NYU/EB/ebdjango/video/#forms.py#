@@ -1,0 +1,7 @@
+from django import forms
+
+# our new form
+class PostForm(forms.Form):
+    pair[0] = forms.CharField(required=True)
+    pair[1] = forms.CharField(required=True)
+

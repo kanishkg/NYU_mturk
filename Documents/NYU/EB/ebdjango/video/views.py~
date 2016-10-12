@@ -1,0 +1,222 @@
+from django.shortcuts import render
+from .models import video
+import random
+from django import forms
+from .forms import ResponseForm
+
+
+videos_list=[]
+
+
+def getcol(i,index,videos):
+    i=i-1
+    if index == 1 :
+        return videos[i].a
+    if index == 2 :
+        return  videos[i].b
+    if index == 3 :
+        return  videos[i].c
+    if index == 4 :
+        return  videos[i].d
+    if index == 5 :
+        return  videos[i].e
+    if index == 6 :
+        return  videos[i].f
+    if index == 7 :
+        return  videos[i].g
+    if index == 8 :
+        return  videos[i].h
+    if index == 9 :
+        return  videos[i].i
+    if index == 10 :
+        return  videos[i].j
+    if index == 11 :
+        return  videos[i].k
+    if index == 12 :
+        return  videos[i].l
+    if index == 13 :
+        return  videos[i].m
+    if index == 14 :
+        return  videos[i].n
+    if index == 15 :
+        return  videos[i].o
+    if index == 16 :
+        return  videos[i].p
+    if index == 17 :
+        return  videos[i].q
+    if index == 18 :
+        return  videos[i].r
+    if index == 19 :
+        return  videos[i].s
+    if index == 20 :
+        return  videos[i].t
+    if index == 21 :
+        return  videos[i].u
+    if index == 22 :
+        return  videos[i].v
+    if index == 23 :
+        return  videos[i].w
+    if index == 24 :
+        return  videos[i].x
+    if index == 25 :
+        return  videos[i].y
+    if index == 26 :
+        return  videos[i].z
+    if index == 27 :
+        return  videos[i].aa
+    if index == 28 :
+        return  videos[i].ab
+    if index == 29 :
+        return  videos[i].ac
+    if index == 30 :
+        return  videos[i].ad
+    if index == 31 :
+        return  videos[i].ae
+    if index == 32 :
+        return videos[i].af
+    if index == 33 :
+        return  videos[i].ag
+    if index == 34 :
+        return  videos[i].ah
+    if index == 35 :
+        return  videos[i].ai
+    if index == 36 :
+        return  videos[i].aj
+    if index == 37 :
+        return  videos[i].ak
+    if index == 38 :
+        return  videos[i].al
+    if index == 39 :
+        return  videos[i].am
+    if index == 40 :
+        return  videos[i].an
+
+def mod_db(k,val):
+    global videos1
+    i=k[0]-1
+    index = k[1]
+    if index == 1 :
+         videos1[i].a+=val
+    if index == 2 :
+         videos1[i].b+=val
+    if index == 3 :
+          videos1[i].c+=val
+    if index == 4 :
+          videos1[i].d+=val
+    if index == 5 :
+          videos1[i].e+=val
+    if index == 6 :
+          videos1[i].f+=val
+    if index == 7 :
+          videos1[i].g+=val
+    if index == 8 :
+          videos1[i].h+=val
+    if index == 9 :
+          videos1[i].i+=val
+    if index == 10 :
+          videos1[i].j+=val
+    if index == 11 :
+          videos1[i].k+=val
+    if index == 12 :
+          videos1[i].l+=val
+    if index == 13 :
+          videos1[i].m+=val
+    if index == 14 :
+          videos1[i].n+=val
+    if index == 15 :
+          videos1[i].o+=val
+    if index == 16 :
+          videos1[i].p+=val
+    if index == 17 :
+          videos1[i].q+=val
+    if index == 18 :
+          videos1[i].r+=val
+    if index == 19 :
+          videos1[i].s+=val
+    if index == 20 :
+          videos1[i].t+=val
+    if index == 21 :
+          videos1[i].u+=val
+    if index == 22 :
+          videos1[i].v+=val
+    if index == 23 :
+          videos1[i].w+=val
+    if index == 24 :
+          videos1[i].x+=val
+    if index == 25 :
+          videos1[i].y+=val
+    if index == 26 :
+          videos1[i].z+=val
+    if index == 27 :
+          videos1[i].aa+=val
+    if index == 28 :
+          videos1[i].ab+=val
+    if index == 29 :
+          videos1[i].ac+=val
+    if index == 30 :
+          videos1[i].ad+=val
+    if index == 31 :
+          videos1[i].ae+=val
+    if index == 32 :
+         videos1[i].af+=val
+    if index == 33 :
+          videos1[i].ag+=val
+    if index == 34 :
+          videos1[i].ah+=val
+    if index == 35 :
+          videos1[i].ai+=val
+    if index == 36 :
+          videos1[i].aj+=val
+    if index == 37 :
+          videos1[i].ak+=val
+    if index == 38 :
+          videos1[i].al+=val
+    if index == 39 :
+          videos1[i].am+=val
+    if index == 40 :
+          videos1[i].an+=val
+    videos1[i].save()
+
+
+def login(request):
+    if request.method == "POST":
+    
+        res = request.POST.get("Answer", "")
+        if res == '1':
+            mod_db(videos_list[k],1)
+        else:
+            mod_db(videos_list[k],-1)
+		
+    return render(request, 'result.html')
+
+
+
+
+    
+def videos(request):
+    global k
+    global videos1
+    videos1 = video.objects.order_by('id')
+    global videos_list
+    i=1
+    num_vid = 8
+    num_video_pair = 1
+    thresh = 1
+
+    while(len(videos_list)<num_video_pair):
+        thresh-=1
+        for i in xrange(num_vid):
+            for j in xrange(i):
+                val= getcol(i,j,videos1)
+                if val == thresh or val == -thresh :
+                    videos_list.append([i,j])
+            
+   
+    k = random.randint(1,len(videos_list))
+    link1 = videos1[videos_list[k][0]-1].ink
+    link2 = videos1[videos_list[k][1]-1].ink
+    return render(request, 'video/videos.html', {'videos1':videos1,'link1':link1, 'link2':link2})
+
+
+
+# Create your views here.

@@ -1,0 +1,67 @@
+<!-- Bootstrap v3.0.3 -->
+<link href="https://s3.amazonaws.com/mturk-public/bs30/css/bootstrap.min.css" rel="stylesheet" />
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+ <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+  <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+<section class="container" id="Other" style="margin-bottom:15px; padding: 10px 10px; font-family: Verdana, Geneva, sans-serif; color:#333333; font-size:0.9em;">
+  <div class="row col-xs-12 col-md-12"><!-- Instructions -->
+    <div class="panel panel-primary">
+      <div class="panel-heading"><strong>Instructions</strong></div>
+
+      <div class="panel-body">
+	<p>Video Similarity is judged on:</p>
+
+	<ul>
+	  <li>Rate if the two videos are similar only based on visual similarity</li>
+	</ul>
+      </div>
+    </div>
+<!-- End Instructions --><!-- Content Body -->
+
+<ul class="nav nav-tabs">
+  <li class="active"><a data-toggle="tab" href="#home">PreTest</a></li>
+  <li> <a data-toggle="tab" href="#menu1">Test</a></li>
+</ul>
+
+<div class="tab-content">
+  <div id="home" class="tab-pane fade ">
+    <h3>Menu 1</h3>
+  </div>
+  <div id="menu1" class="tab-pane fade in active">
+    
+    <section>
+      <div class="row">
+	<div class="col-sm-6">
+	  <embed src="{{link2}}" width="560" height="315" scale="aspect" controller="true" autoplay="false">
+	</div>
+	
+	<div class="col-sm-6">
+	  <embed src="{{link1}}" width="560" height="315" scale="aspect" controller="true" autoplay="false">
+	</div>
+	
+	<fieldset><label>Are the two videos similar?</label>
+	  <form action="{% url 'video.views.login'%}" method="post">
+	    {% csrf_token %} 
+	    <div class="radio"><label><input name="Answer" type="radio" value="1" />Yes</label></div>
+	    <div class="radio"><label><input name="Answer" type="radio" value="0" />No</label></div>
+	    <div class = "button"><input type="submit" value="Submit" /></div>
+	  </form>
+	</fieldset>
+    </section>
+    </div>
+</div>
+
+
+
+<!-- End Content Body --></div>
+</section>
+<!-- close container -->
+<style type="text/css">fieldset {
+  padding: 10px;
+  background:#fbfbfb;
+  border-radius:5px;
+  margin-bottom:5px;
+}
+</style>

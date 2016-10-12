@@ -1,0 +1,6 @@
+from django import forms
+
+# our new form
+class submit(forms.Form):
+    pair = forms.ChoiceField(required=True, widget = forms.RadioSelect, choices=[('1','Yes'),('2','No')] )
+

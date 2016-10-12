@@ -1,0 +1,4 @@
+<ExternalQuestion xmlns="http://mechanicalturk.amazonaws.com/AWSMechanicalTurk/2014-08-15/AWSMechanicalTurkRequester.wsdl">
+  <ExternalURL>http://django-env.hgryvtimgy.us-west-2.elasticbeanstalk.com/</ExternalURL>
+  <FrameHeight>900</FrameHeight>
+</ExternalQuestion>
