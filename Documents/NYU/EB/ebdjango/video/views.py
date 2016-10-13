@@ -14,7 +14,7 @@ videos_list=[]
 test_video_list = [['https://s3.amazonaws.com/nyurte/Baltimore/car+on+fire2.mp4','https://s3.amazonaws.com/nyurte/Baltimore/car+on+fire1.mp4','1'],['https://s3.amazonaws.com/nyurte/Baltimore/car+on+fire2.mp4','https://s3.amazonaws.com/nyurte/Baltimore/car+on+fire3.mp4','1'],['https://s3.amazonaws.com/nyurte/Baltimore/car+traffic1.mp4','https://s3.amazonaws.com/nyurte/Baltimore/car+on+fire4.mp4','0'],['https://s3.amazonaws.com/nyurte/Baltimore/car+on+fire2.mp4','https://s3.amazonaws.com/nyurte/Baltimore/car+traffic3.mp4','0'],['https://s3.amazonaws.com/nyurte/Baltimore/car+traffic1.mp4','https://s3.amazonaws.com/nyurte/Baltimore/car+traffic2.mp4','1']]
 test_video_pair = 2
 test_indices = []
-
+links=[]
 @register.filter
 def addone(value,args):
     return int(value) + 1 
@@ -109,10 +109,10 @@ def getcol(i,index,videos):
 def mod_db_2(k,val, workerId, vid_fold):
    
     global videos1
-    i=k[0]
+    i=k[0][0]
     
-    vid = video.objects.get(id = k[0]+(vid_fold-1)*40)
-    vid2 =  video.objects.get(id = k[1]+(vid_fold-1)*40)
+    vid = video.objects.get(id = k[0][0]+(vid_fold-1)*40)
+    vid2 =  video.objects.get(id = k[0][1]+(vid_fold-1)*40)
    
    
 
@@ -124,10 +124,10 @@ def mod_db_2(k,val, workerId, vid_fold):
 
 def mod_db(k,val, workerId, vid_fold):
     global videos1
-    i=k[0]
-    index = k[1]
+    i=k[0][0]
+    index = k[0][1]
     
-    vid = video.objects.get(id = k[0]+(vid_fold-1)*40)
+    vid = video.objects.get(id = k[0][0]+(vid_fold-1)*40)
     
 
     
@@ -224,12 +224,13 @@ def videos(request):
     num_vid_fold = 3
     num_vid = 40
     num_videos = num_video_pair*num_vid_fold
-    links=[]
+    global links
     global videos_list
+    global render_data
     if request.method == 'GET':
         
-
-        global render_data
+        links = []
+        
         try:
 
             if request.GET.get("assignmentId") == "ASSIGNMENT_ID_NOT_AVAILABLE":
@@ -308,6 +309,8 @@ def videos(request):
             if k in test_indices:
                 links.insert(k,[test_video_list[done][0],test_video_list[done][1],0])
                 done+=1
+
+
         link1 = []
         link2 = []
         for link in links:
@@ -330,7 +333,7 @@ def videos(request):
                         test_score += 1
 
         if test_score < 2:
-            return HttpResponseRedirect('https://workersandbox.mturk.com/mturk/externalSubmit?assignmentId='+str(render_data['assignmentId'])+'&workerId'+str(render_data['workerId'])+'&pass='+'0'+'&hitId='+str(render_data['hitId']))
+            return HttpResponseRedirect('https://workersandbox.mturk.com/mturk/externalSubmit?assignmentId='+str(render_data['assignmentId'])+'&workerId='+str(render_data['workerId'])+'&pass='+'0'+'&hitId='+str(render_data['hitId']))
         done = 0
         for k in xrange(num_videos+test_video_pair):
             res = form.cleaned_data['pair'+str(k+1)]
@@ -346,5 +349,5 @@ def videos(request):
                 mod_db_2(videos_list[k-done],-1,render_data['workerId'],links[k][2])
       
                     
-        return HttpResponseRedirect('https://workersandbox.mturk.com/mturk/externalSubmit?assignmentId='+str(render_data['assignmentId'])+'&workerId'+str(render_data['workerId'])+'&pass='+'1'+'&hitId='+str(render_data['hitId']))
-    return render(request, 'video/videos.html', {  'lol':test_indices, 'num_video_pair':num_videos+test_video_pair,'link1':link1,'link2':link2,'test_indices':test_indices, 'form': form, 'submit_state': submit_state, 'links':links})
+        return HttpResponseRedirect('https://workersandbox.mturk.com/mturk/externalSubmit?assignmentId='+str(render_data['assignmentId'])+'&workerId='+str(render_data['workerId'])+'&pass='+'1'+'&hitId='+str(render_data['hitId']))
+    return render(request, 'video/videos.html', {  'num_video_pair':num_videos+test_video_pair,'link1':link1,'link2':link2,'videos_list':videos_list, 'form': form, 'submit_state': submit_state, 'links':links})
