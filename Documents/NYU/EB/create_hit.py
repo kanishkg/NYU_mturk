@@ -15,13 +15,13 @@ mturk = boto.mturk.connection.MTurkConnection(
 		host = sandbox_host,
 		debug = 1 # debug = 2 prints out all requests.
 		)
-for i in xrange(num_tasks):    
-	create_hit_result = mturk.create_hit(
-		title = 'vidsim3', max_assignments = 10,
-		description = description,
-		keywords = keywords,
-		question = questionform,
-		reward = boto.mturk.price.Price( amount = amount),
-		response_groups = ( 'Minimal', 'HITDetail' ), # I don't know what response groups are
-		)
+  
+create_hit_result = mturk.create_hit(
+	title = 'vidsim3', max_assignments = 10,
+	description = description,
+	keywords = keywords,
+	question = questionform,
+	reward = boto.mturk.price.Price( amount = amount),
+	response_groups = ( 'Minimal', 'HITDetail' ), # I don't know what response groups are
+	)
 
